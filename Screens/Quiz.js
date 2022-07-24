@@ -13,13 +13,16 @@ const Quiz = ({navigation}) => {
    const [questionNumber, setQuestionNumber] = useState(0);
    const [options, setOptions] = useState([]);
    const [score, setScore] =useState(0);
+   const [isLoading, setIsLoading] = useState(false);
   
     const getQuiz = async()=>{
-        const url = 'https://opentdb.com/api.php?amount=2&difficulty=easy&type=multiple&encode=url3986';
+        setIsLoading(true)
+        const url = 'https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple&encode=url3986';
         const response = await fetch(url);
         const data = await response.json();
         setQuestions(data.results)
         setOptions(generateOptionsAndSHuffle(data.results[0]))
+        setIsLoading(false)
     }
     useEffect(()=> {
         getQuiz();
@@ -45,6 +48,9 @@ const Quiz = ({navigation}) => {
         setQuestionNumber(questionNumber + 1);
         setOptions(generateOptionsAndSHuffle(questions[questionNumber + 1]))
        }
+       if (questionNumber === questions.length) {
+        handleShowResult()
+       }
     }
 
     const handleShowResult =() => {
@@ -54,7 +60,10 @@ const Quiz = ({navigation}) => {
     }
     return (
         <View style={styles.container}>
-             {questions && (
+             {isLoading ? 
+             <View style={styles.loadingContainer}>
+                  <Text style={styles.loadingText}>Loading... </Text>
+             </View> : questions && (
             <View style={styles.parent}>
                 <View style={styles.top}>
                  <Text style={styles.question}>Question: {decodeURIComponent(questions[questionNumber].question)}  </Text>
@@ -147,6 +156,16 @@ const styles = StyleSheet.create({
     },
     parent: {
         height: '100%'
+    },
+    loadingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1
+    },
+    loadingText: {
+        fontSize: 26,
+        fontWeight: "600",
+        
     }
 })
 

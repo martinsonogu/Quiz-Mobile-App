@@ -4,7 +4,10 @@ import {View, StyleSheet, Text, Image, TouchableOpacity} from 'react-native';
 const Result = ({navigation, route}) => {
 const {score} = route.params
     let rawscore = score
-    let perc = Math.floor((rawscore/60) * 100)
+    let correctAnswers = score/10
+    let perc = Math.floor((rawscore/10) * 10)
+
+    const resultBanner = score > 50 ? "https://cdni.iconscout.com/illustration/premium/preview/team-victory-5303612-4423551.png?w=0&h=1400" : "https://cdni.iconscout.com/illustration/premium/preview/startup-business-fail-5632006-4694285.png?w=0&h=1400"
     
 
     return (
@@ -13,13 +16,13 @@ const {score} = route.params
                  <Text style={styles.text}>Result</Text>
               </View>
               <View style={styles.bannerContainer}>
-              <Image source={{uri:'https://cdni.iconscout.com/illustration/premium/preview/team-victory-5303612-4423551.png?w=0&h=1400'}}
+              <Image source={{uri: resultBanner}}
                 style={styles.banner}
                 resizeMode="contain"
                 />
               </View>
               <View style={styles.scoreboard}>
-              <Text style={styles.scoreboardText}>Your Score is: {rawscore} </Text>
+              <Text style={styles.scoreboardText1}>Your got {correctAnswers} correct answers</Text>
                <Text style={styles.scoreboardText}>Your Score is: {perc}% </Text>
               </View>
               
@@ -68,6 +71,11 @@ const styles = StyleSheet.create({
     },
     scoreboardText: {
         fontSize:28,
+
+    },
+    scoreboardText1: {
+        fontSize:22,
+        marginVertical:30
 
     },
     button: {
